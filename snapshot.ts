@@ -23,15 +23,16 @@ const { spawnSync } = require<{
 const { join } = require<any>('path');
 
 const git = function(atPath) {
-	const options: SpawnOptions = {
+	const options: SpawnOptions = { cwd: atPath };
+	const optionsWithInherit: SpawnOptions = {
 		cwd: atPath,
 		stdio: 'inherit'
 	};
 	return {
 		diffIndex: () => spawnSync('git', ['diff-index', '--quiet', 'HEAD'], options),
 		sha: () => spawnSync('git', ['rev-parse', 'HEAD'], options),
-		commit: (message: string) => spawnSync('git', ['commit', '-m', message, '-a'], options),
-		push: () => spawnSync('git', ['push'], options)
+		commit: (message: string) => spawnSync('git', ['commit', '-m', message, '-a'], optionsWithInherit),
+		push: () => spawnSync('git', ['push'], optionsWithInherit)
 	};
 }
 
